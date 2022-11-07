@@ -22,6 +22,10 @@ public class TwitterDriver extends Application {
         scene = adminSceneMaker.createScene();
         primaryStage.setScene(scene);
         primaryStage.show();
+        primaryStage.setMinHeight(480);
+        primaryStage.setMaxHeight(480);
+        primaryStage.setMinWidth(780);
+        primaryStage.setMaxWidth(780);
         stage = primaryStage;
     }
 
@@ -32,6 +36,8 @@ public class TwitterDriver extends Application {
         stage2.setScene(scene);
         stage2.initOwner(stage);
         stage2.show();
+        stage2.setMaxWidth(700);
+        stage2.setMinHeight(480);
     }
 
     public static void main(String[] args) {
