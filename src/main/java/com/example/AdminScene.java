@@ -4,7 +4,6 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -13,6 +12,7 @@ import java.io.IOException;
 
 public class AdminScene implements SceneMaker{
     private AdminController admin;
+    private AppSingleton app = AppSingleton.getInstance();
     public AdminScene() {
         this.admin = new AdminController();
     }
@@ -26,15 +26,9 @@ public class AdminScene implements SceneMaker{
         Scene scene = new Scene(adminWindow, 1000, 440);
         return scene;
     }
-    private VBox createTreeView() {
-        TreeItem<String> rootItem = new TreeItem<String> ("Root");
-        rootItem.setExpanded(true);
-        for (int i = 1; i < 50; i++) {
-            TreeItem<String> item = new TreeItem<String> ("Message" + i);   
-            rootItem.getChildren().add(item);
-        }        
-        TreeView<String> tree = new TreeView<String> (rootItem);        
+    private VBox createTreeView() {    
         VBox root = new VBox(20);
+        TreeView<Users> tree = app.getTree();
         root.getChildren().add(tree);
         root.setMinSize(300, 300);
         root.setPrefHeight(400);
@@ -76,9 +70,11 @@ public class AdminScene implements SceneMaker{
         //Setting Button Functionality
         addUser.setOnAction(event -> {
             System.out.println("Adding User: " + uid.getText());
+            admin.addUser(uid.getText());
         });
         addGroup.setOnAction(event -> {
             System.out.println("Adding Group: " + gid.getText());
+            admin.addGroup(gid.getText());
         });
         openUserWindow.setOnAction(event -> {
             try {
@@ -108,7 +104,7 @@ public class AdminScene implements SceneMaker{
         
         HBox topButtons = new HBox(20);
         VBox topLeft = new VBox(20);
-        topLeft.getChildren().addAll(uid, gid); //PlaceHolder replace with text boxes later
+        topLeft.getChildren().addAll(uid, gid);
         VBox topRight = new VBox(20);
         topRight.getChildren().addAll(addUser, addGroup);
         topButtons.getChildren().addAll(topLeft, topRight);
