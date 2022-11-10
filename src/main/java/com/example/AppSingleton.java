@@ -1,5 +1,7 @@
 package com.example;
 
+import java.util.HashMap;
+
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.paint.Color;
@@ -10,6 +12,8 @@ public class AppSingleton {
     TreeView<Users> tree;
     TreeItem<Users> currRoot;
     TreeItem<Users> currGroup;
+    private HashMap<String, Users> userList = new HashMap<String, Users>();
+
     private AppSingleton() {
         createTree();
     }
@@ -17,38 +21,20 @@ public class AppSingleton {
     public static AppSingleton getInstance()
     {
         if (app == null) {
-            System.out.println("Only Generated Once");
             app = new AppSingleton();
         }
         return app;
     }
 
     private void createTree() {
-        System.out.println("Creating Tree");
         //Creating the root node
         Users node = new UserGroups();
         node.setId("Root");
-        TreeItem<Users> rootItem = new TreeItem<Users>(node, new Rectangle(16, 16, Color.CORAL));
+        TreeItem<Users> rootItem = new TreeItem<Users>(node, new Rectangle(16, 16, Color.MIDNIGHTBLUE));
         currRoot = rootItem;
         currGroup = rootItem;
         rootItem.setExpanded(true);
-        this.tree = new TreeView<Users>(rootItem); //Attaches the Root to the Base of the TreeView.
-
-        //Adding Test Leaf Elements (Mixture of users and groups)
-        // for (int i = 1; i < 50; i++) {
-        //     TreeItem<Users> item;
-        //     if(i % 2 == 0) {
-        //         Users tempUser = new UserGroups();
-        //         tempUser.setId("Message" + i);
-        //         item = new TreeItem<Users> (tempUser);   
-        //     }
-        //     else {
-        //         Users tempUser = new UserPeople();
-        //         tempUser.setId("Message" + i);
-        //         item = new TreeItem<Users> (tempUser);   
-        //     }
-        //     rootItem.getChildren().add(item);
-        // }     
+        this.tree = new TreeView<Users>(rootItem); //Attaches the Root to the Base of the TreeView.  
 
         //Works on the process of node selection
         tree.getSelectionModel()
@@ -59,14 +45,8 @@ public class AppSingleton {
                 currGroup = newValue.getParent();
             }
             else if (newValue.getValue() instanceof UserGroups) {
-                System.out.println("Selected a group!");
                 currGroup = newValue;
             }
-
-            //Test Comments: Delete later
-            System.out.println();
-            System.out.println("Selected Group : " + currRoot.getValue());
-            System.out.println(currRoot.getValue() + "'s group is " + currGroup.getValue());
         });
         return;
     }
@@ -84,5 +64,8 @@ public class AppSingleton {
     }
     TreeItem<Users> getCurrGroup() {
         return currGroup;
+    }
+    HashMap<String, Users> getUserList() {
+        return userList;
     }
 }

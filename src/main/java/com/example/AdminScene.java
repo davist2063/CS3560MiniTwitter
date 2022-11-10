@@ -69,16 +69,14 @@ public class AdminScene implements SceneMaker{
 
         //Setting Button Functionality
         addUser.setOnAction(event -> {
-            System.out.println("Adding User: " + uid.getText());
             admin.addUser(uid.getText());
         });
         addGroup.setOnAction(event -> {
-            System.out.println("Adding Group: " + gid.getText());
             admin.addGroup(gid.getText());
         });
         openUserWindow.setOnAction(event -> {
             try {
-                admin.openSecondary();
+                admin.openSecondary(app.getCurrRoot());
             } catch (IOException e) {
                 e.printStackTrace();
             }
