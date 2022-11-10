@@ -10,14 +10,14 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public class UserScene implements SceneMaker {
-    private UserController user;
-    public UserScene() {
-        this.user = new UserController();
+    private UserController userControl;
+    public UserScene(UserController uc) {
+        this.userControl = uc;
     }
     public Scene createScene() {
         
         //Creating all buttons/textareas/listviews
-        TextArea currentUser = new TextArea("Current User: Davis Tong");
+        TextArea currentUser = new TextArea("Current User: " + userControl.getUserId());
         currentUser.setMaxHeight(20);
         currentUser.setEditable(false);
         TextArea uid = new TextArea("");
@@ -32,15 +32,17 @@ public class UserScene implements SceneMaker {
         Button postTweet = new Button("Post Tweet");
         postTweet.setMinSize(170, 41);
         postTweet.setCenterShape(true);
-        ListView<String> currentFollowing = new ListView<>();
-        ListView<String> newsFeed = new ListView<>();
+        ListView<UserPeople> currentFollowing = userControl.getCurrentFollowers();
+        ListView<String> newsFeed = userControl.getNewsFeed();
 
         //Setting button functionality
         followUser.setOnAction(event -> {
             System.out.println("Following User: " + uid.getText());
+            userControl.followUser(uid.getText());
         });
         postTweet.setOnAction(event -> {
             System.out.println("Posting Tweet: " + tweetMessage.getText());
+            userControl.post(tweetMessage.getText());
         });
 
         //Creating the window
