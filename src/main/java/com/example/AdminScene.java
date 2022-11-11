@@ -28,7 +28,7 @@ public class AdminScene implements SceneMaker{
     }
     private VBox createTreeView() {    
         VBox root = new VBox(20);
-        TreeView<Users> tree = app.getTree();
+        TreeView<SysEntries> tree = app.getTree();
         root.getChildren().add(tree);
         root.setMinSize(300, 300);
         root.setPrefHeight(400);
@@ -83,15 +83,19 @@ public class AdminScene implements SceneMaker{
         });
         showUserTotal.setOnAction(event -> {
             System.out.println("Showing User Total");
+            admin.getUserCount();
         });
         showGroupTotal.setOnAction(event -> {
             System.out.println("Showing Group Total");
+            admin.getGroupCount();
         });
         showMessageTotal.setOnAction(event -> {
             System.out.println("Showing Message Total");
+            admin.getMessageCount();
         });
         showPositivePercentage.setOnAction(event -> {
             System.out.println("Showing Positive Percentage");
+            admin.getPositivePercentage();
         });
 
         //Creating the Right Side UI Panel for the Admin Control Panel

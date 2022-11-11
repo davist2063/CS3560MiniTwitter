@@ -8,6 +8,9 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 
 public class UserScene implements SceneMaker {
     private UserController userControl;
@@ -17,9 +20,9 @@ public class UserScene implements SceneMaker {
     public Scene createScene() {
         
         //Creating all buttons/textareas/listviews
-        TextArea currentUser = new TextArea("Current User: " + userControl.getUserId());
-        currentUser.setMaxHeight(20);
-        currentUser.setEditable(false);
+        Font font = Font.font("Verdana", FontWeight.BOLD, 16);
+        Text currUser = new Text("Current User: " + userControl.getUserId());
+        currUser.setFont(font);
         TextArea uid = new TextArea("");
         uid.setMaxHeight(41);
         uid.setCenterShape(true);
@@ -32,7 +35,7 @@ public class UserScene implements SceneMaker {
         Button postTweet = new Button("Post Tweet");
         postTweet.setMinSize(170, 41);
         postTweet.setCenterShape(true);
-        ListView<UserPeople> currentFollowing = userControl.getCurrentFollowers();
+        ListView<Users> currentFollowing = userControl.getCurrentFollowers();
         ListView<String> newsFeed = userControl.getNewsFeed();
 
         //Setting button functionality
@@ -53,7 +56,7 @@ public class UserScene implements SceneMaker {
         topButtons.getChildren().addAll(uid, followUser);
         HBox bottomButtons = new HBox(20);
         bottomButtons.getChildren().addAll(tweetMessage, postTweet);        
-        userWindow.getChildren().addAll(currentUser, topButtons, currentFollowing, bottomButtons, newsFeed);
+        userWindow.getChildren().addAll(currUser, topButtons, currentFollowing, bottomButtons, newsFeed);
         Scene scene = new Scene(userWindow, 640, 480);
         return scene;
     }
