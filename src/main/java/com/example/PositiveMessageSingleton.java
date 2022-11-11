@@ -6,10 +6,8 @@ public class PositiveMessageSingleton {
     public static PositiveMessageSingleton positiveMessages;
     ArrayList<String> posWordsList = new ArrayList<String>();
     private PositiveMessageSingleton() {
-        addWords("happy");
-        addWords("nice");
-        addWords("great");
-        addWords("amazing");
+        String[] positiveWords = {"happy", "nice", "great", "amazing", "good", "excellent", "hooray"};
+        addAllWords(positiveWords);
     }
     public static PositiveMessageSingleton getInstance() {
         if (positiveMessages == null) {
@@ -20,10 +18,15 @@ public class PositiveMessageSingleton {
     public void addWords(String str) {
         posWordsList.add(str.toLowerCase());
     }
+    private void addAllWords(String[] args) {
+        for(int i = 0; i < args.length; i++) {
+            addWords(args[i]);
+        }
+    }
     public ArrayList<String> getPosWordsList() {
         return posWordsList;
     }
-    public boolean isMessagePositive(String message) {
+    public boolean isMessagePositive(String message) { //Checks string for presence of all keywords.
         boolean isPositive = false;
         String tempString = message.toLowerCase();
         for(int i = 0; i < posWordsList.size(); i++) {

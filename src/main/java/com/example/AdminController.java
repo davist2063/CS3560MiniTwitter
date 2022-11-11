@@ -50,6 +50,7 @@ public class AdminController {
         return isEmpty;
     }
 
+    //Top Right Button Functionalities
     public void openSecondary(TreeItem<SysEntries> userData) throws IOException { //Opens new user view window.
         if(userData.getValue() instanceof Users) {
             UserController uc = new UserController(userData);
@@ -67,7 +68,6 @@ public class AdminController {
             System.out.println("Cannot open user view for a group!");
         }
     }
-
     public void addUser(String input) {
         if(isIDValid(input)) {
             TreeItem<SysEntries> item;
@@ -93,7 +93,8 @@ public class AdminController {
             userList.put(input, newGroup);
         }
     }
-
+    
+    //Bottom Right Button Functionalities
     public void getGroupCount() {
         String resultMessage;
         GroupCountVisitor visit = new GroupCountVisitor();
@@ -140,7 +141,7 @@ public class AdminController {
          String.format("%5.2f", percentage) + "%";
         createOutputWindow(resultMessage);
     }
-    private void createOutputWindow(String message) {
+    private void createOutputWindow(String message) { //Open window to display results from bottom right buttons.
         userSceneMaker = new ResultDisplayScene(message);
         Stage stage2 = new Stage();
         stage2.setTitle("Results: ");

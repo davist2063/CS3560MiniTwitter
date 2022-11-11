@@ -9,7 +9,7 @@ public class MessageCountVisitor implements Visitor {
     @Override
     public void visitUser(Users person) {
         ObservableList<String> messages = person.getNewsFeed().getItems();
-        for (String each: messages)
+        for (String each: messages) //Iterates through all messages for a user.
         {
             setCount(getCount() + 1);
         }

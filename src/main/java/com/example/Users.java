@@ -7,12 +7,13 @@ import javafx.scene.control.ListView;
 public class Users implements SysEntries, Subscribers, Publishers{
     private String userId = "";
     HashMap<String, Users> followers = new HashMap<String, Users>();
-    private ListView<Users> currentFollowing;
+    HashMap<String, Users> following = new HashMap<String, Users>();
+    private ListView<Users> currentFollowings;
     private ListView<String> newsFeed;
 
     public Users() {
         followers.put(this.getId(), this);
-        currentFollowing = new ListView<>();
+        currentFollowings = new ListView<>();
         newsFeed = new ListView<>();
     }
     
@@ -32,10 +33,13 @@ public class Users implements SysEntries, Subscribers, Publishers{
     public HashMap<String, Users> getFollowers() {
         return followers;
     }
+    public HashMap<String, Users> getFollowing() {
+        return following;
+    }
     public void subscribe(Users user) { //Adds followers for a given user.
         followers.put(user.getId(), user);
-        System.out.println("Added " + user.getId() + " to " + this.getId() + "'s followers list");
-        currentFollowing.getItems().add(user);
+        System.out.println("Added " + this.getId() + " to " + user.getId() + "'s followings list");
+        user.getCurrentFollowings().getItems().add(this);
         return;
     }
     public void updateFeed(String message) {
@@ -53,8 +57,8 @@ public class Users implements SysEntries, Subscribers, Publishers{
         notifyFollowers(message);
         return;
     }
-    public ListView<Users> getCurrentFollowers() {
-        return currentFollowing;
+    public ListView<Users> getCurrentFollowings() {
+        return currentFollowings;
     }
     public ListView<String> getNewsFeed() {
         return newsFeed;

@@ -10,9 +10,9 @@ public class PositiveMessageCountVisitor implements Visitor {
     @Override
     public void visitUser(Users person) {
         ObservableList<String> messages = person.getNewsFeed().getItems();
-        for (String each: messages)
+        for (String each: messages) //Iterates through all the messages for a user.
         {
-            if(list.isMessagePositive(each)) {
+            if(list.isMessagePositive(each)) { //Only increments if message contains positive keywords
                 setCount(getCount() + 1);
             }
         }

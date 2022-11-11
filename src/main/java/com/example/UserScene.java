@@ -21,8 +21,13 @@ public class UserScene implements SceneMaker {
         
         //Creating all buttons/textareas/listviews
         Font font = Font.font("Verdana", FontWeight.BOLD, 16);
+        Font smallerfont = Font.font("Verdana", 12);
         Text currUser = new Text("Current User: " + userControl.getUserId());
+        Text currFollowing = new Text("Currently Following: ");
+        Text feed = new Text("News Feed: ");
         currUser.setFont(font);
+        currFollowing.setFont(smallerfont);
+        feed.setFont(smallerfont);
         TextArea uid = new TextArea("");
         uid.setMaxHeight(41);
         uid.setCenterShape(true);
@@ -35,7 +40,7 @@ public class UserScene implements SceneMaker {
         Button postTweet = new Button("Post Tweet");
         postTweet.setMinSize(170, 41);
         postTweet.setCenterShape(true);
-        ListView<Users> currentFollowing = userControl.getCurrentFollowers();
+        ListView<Users> currentFollowing = userControl.getCurrentFollowings();
         ListView<String> newsFeed = userControl.getNewsFeed();
 
         //Setting button functionality
@@ -56,7 +61,7 @@ public class UserScene implements SceneMaker {
         topButtons.getChildren().addAll(uid, followUser);
         HBox bottomButtons = new HBox(20);
         bottomButtons.getChildren().addAll(tweetMessage, postTweet);        
-        userWindow.getChildren().addAll(currUser, topButtons, currentFollowing, bottomButtons, newsFeed);
+        userWindow.getChildren().addAll(currUser, topButtons, currFollowing, currentFollowing, bottomButtons, feed, newsFeed);
         Scene scene = new Scene(userWindow, 640, 480);
         return scene;
     }
