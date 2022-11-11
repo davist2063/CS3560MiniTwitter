@@ -14,7 +14,7 @@ public class AdminController {
     private AppSingleton app;
     private static SceneMaker userSceneMaker;
     private static Scene scene;
-    private HashMap<String, Users> userList;
+    private HashMap<String, SysEntries> userList;
     
     AdminController() {
         app = AppSingleton.getInstance();
@@ -50,8 +50,8 @@ public class AdminController {
         return isEmpty;
     }
 
-    public void openSecondary(TreeItem<Users> userData) throws IOException { //Opens new user view window.
-        if(userData.getValue() instanceof UserPeople) {
+    public void openSecondary(TreeItem<SysEntries> userData) throws IOException { //Opens new user view window.
+        if(userData.getValue() instanceof Users) {
             UserController uc = new UserController(userData);
             userSceneMaker = new UserScene(uc);
             Stage stage2 = new Stage();
@@ -70,24 +70,83 @@ public class AdminController {
 
     public void addUser(String input) {
         if(isIDValid(input)) {
-            TreeItem<Users> item;
-            Users tempUser = new UserPeople();
+            TreeItem<SysEntries> item;
+            Groups currGroup = (Groups)app.getCurrGroup().getValue();
+            SysEntries tempUser = new Users();
             tempUser.setId(input);
-            item = new TreeItem<Users>(tempUser, new Circle(8, Color.SEAGREEN));   
+            item = new TreeItem<SysEntries>(tempUser, new Circle(8, Color.SEAGREEN));   
             app.getCurrGroup().getChildren().add(item);
+            currGroup.addEntry(tempUser);
             userList.put(input, tempUser);
         }
     }
 
     public void addGroup(String input) {
         if(isIDValid(input)) {
-            TreeItem<Users> item;
-            Users tempUser = new UserGroups();
-            tempUser.setId(input);
-            item = new TreeItem<Users>(tempUser, new Rectangle(16, 16, Color.POWDERBLUE));   
+            TreeItem<SysEntries> item;
+            Groups currGroup = (Groups)app.getCurrGroup().getValue();
+            SysEntries newGroup = new Groups();
+            newGroup.setId(input);
+            item = new TreeItem<SysEntries>(newGroup, new Rectangle(16, 16, Color.POWDERBLUE));   
             app.getCurrGroup().getChildren().add(item);
-            userList.put(input, tempUser);
+            currGroup.addEntry(newGroup);
+            userList.put(input, newGroup);
         }
     }
 
+    public void getGroupCount() {
+        String resultMessage;
+        GroupCountVisitor visit = new GroupCountVisitor();
+        SysEntries root = app.getRootItem().getValue();
+        root.accept(visit);
+        resultMessage = "Total # Groups: " + visit.getCount();
+        createOutputWindow(resultMessage);
+    }
+    public void getUserCount() {
+        String resultMessage;
+        UserCountVisitor visit = new UserCountVisitor();
+        SysEntries root = app.getRootItem().getValue();
+        root.accept(visit);
+        resultMessage = "Total # Users: " + visit.getCount();
+        createOutputWindow(resultMessage);
+    }
+    public void getMessageCount() {
+        String resultMessage;
+        MessageCountVisitor visit = new MessageCountVisitor();
+        SysEntries root = app.getRootItem().getValue();
+        root.accept(visit);
+        resultMessage = "Total # Messages: " + visit.getCount();
+        createOutputWindow(resultMessage);
+    }
+    public void getPositivePercentage() {
+        String resultMessage;
+        double numMessage;
+        double numPositive;
+        double percentage;
+        MessageCountVisitor mcVisitor = new MessageCountVisitor();
+        PositiveMessageCountVisitor pmVisitor = new PositiveMessageCountVisitor();
+        SysEntries root = app.getRootItem().getValue();
+        root.accept(mcVisitor);
+        root.accept(pmVisitor);
+        numMessage = mcVisitor.getCount();
+        numPositive = pmVisitor.getCount();
+        if(numMessage == 0) {
+            percentage = 0;
+        }
+        else {
+            percentage = numPositive / numMessage * 100.0;
+        }
+        resultMessage = "Positive Messages Percentage: " +
+         String.format("%5.2f", percentage) + "%";
+        createOutputWindow(resultMessage);
+    }
+    private void createOutputWindow(String message) {
+        userSceneMaker = new ResultDisplayScene(message);
+        Stage stage2 = new Stage();
+        stage2.setTitle("Results: ");
+        scene = userSceneMaker.createScene();
+        stage2.setScene(scene);
+        TwitterDriver.linkOwner(stage2);
+        stage2.show();
+    }
 }

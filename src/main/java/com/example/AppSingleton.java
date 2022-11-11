@@ -9,10 +9,11 @@ import javafx.scene.shape.Rectangle;
 
 public class AppSingleton {
     public static AppSingleton app;
-    TreeView<Users> tree;
-    TreeItem<Users> currRoot;
-    TreeItem<Users> currGroup;
-    private HashMap<String, Users> userList = new HashMap<String, Users>();
+    TreeView<SysEntries> tree;
+    TreeItem<SysEntries> rootItem;
+    TreeItem<SysEntries> currRoot;
+    TreeItem<SysEntries> currGroup;
+    private HashMap<String, SysEntries> userList = new HashMap<String, SysEntries>();
 
     private AppSingleton() {
         createTree();
@@ -28,44 +29,47 @@ public class AppSingleton {
 
     private void createTree() {
         //Creating the root node
-        Users node = new UserGroups();
+        SysEntries node = new Groups();
         node.setId("Root");
-        TreeItem<Users> rootItem = new TreeItem<Users>(node, new Rectangle(16, 16, Color.MIDNIGHTBLUE));
+        this.rootItem = new TreeItem<SysEntries>(node, new Rectangle(16, 16, Color.MIDNIGHTBLUE));
         currRoot = rootItem;
         currGroup = rootItem;
         rootItem.setExpanded(true);
-        this.tree = new TreeView<Users>(rootItem); //Attaches the Root to the Base of the TreeView.  
+        this.tree = new TreeView<SysEntries>(rootItem); //Attaches the Root to the Base of the TreeView.  
 
         //Works on the process of node selection
         tree.getSelectionModel()
         .selectedItemProperty()
         .addListener((observable, oldValue, newValue) -> {
             currRoot = newValue;
-            if(newValue.getValue() instanceof UserPeople) {
+            if(newValue.getValue() instanceof Users) {
                 currGroup = newValue.getParent();
             }
-            else if (newValue.getValue() instanceof UserGroups) {
+            else if (newValue.getValue() instanceof Groups) {
                 currGroup = newValue;
             }
         });
         return;
     }
-    TreeView<Users> getTree() {
+    TreeView<SysEntries> getTree() {
         return tree;
     }
-    void setCurrRoot(TreeItem<Users> newRoot) {
+    void setCurrRoot(TreeItem<SysEntries> newRoot) {
         currRoot = newRoot;
     }
-    TreeItem<Users> getCurrRoot() {
+    TreeItem<SysEntries> getCurrRoot() {
         return currRoot;
     }
-    void setCurrGroup(TreeItem<Users> newGroup) {
+    void setCurrGroup(TreeItem<SysEntries> newGroup) {
         currGroup = newGroup;
     }
-    TreeItem<Users> getCurrGroup() {
+    TreeItem<SysEntries> getCurrGroup() {
         return currGroup;
     }
-    HashMap<String, Users> getUserList() {
+    HashMap<String, SysEntries> getUserList() {
         return userList;
+    }
+    public TreeItem<SysEntries> getRootItem() {
+        return rootItem;
     }
 }
