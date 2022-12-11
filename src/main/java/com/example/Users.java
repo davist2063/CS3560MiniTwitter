@@ -2,6 +2,7 @@ package com.example;
 
 import java.util.HashMap;
 
+import javafx.beans.property.StringProperty;
 import javafx.scene.control.ListView;
 
 public class Users implements SysEntries, Subscribers, Publishers{
@@ -10,11 +11,15 @@ public class Users implements SysEntries, Subscribers, Publishers{
     HashMap<String, Users> following = new HashMap<String, Users>();
     private ListView<Users> currentFollowings;
     private ListView<String> newsFeed;
+    private Long creationTime;
+    private LastUpdateModel newTime;
 
     public Users() {
         followers.put(this.getId(), this);
         currentFollowings = new ListView<>();
         newsFeed = new ListView<>();
+        creationTime = Long.valueOf(System.currentTimeMillis());
+        newTime = new LastUpdateModel(System.currentTimeMillis());
     }
     
     @Override
@@ -50,6 +55,7 @@ public class Users implements SysEntries, Subscribers, Publishers{
         for(HashMap.Entry<String, Users> entry : followers.entrySet()) {
             Users user = entry.getValue();
             user.updateFeed(message);
+            user.updateTime();
         }
         return;
     }
@@ -63,9 +69,23 @@ public class Users implements SysEntries, Subscribers, Publishers{
     public ListView<String> getNewsFeed() {
         return newsFeed;
     }
-
     @Override
     public void accept(Visitor visitor) {
         visitor.visitUser(this);
+    }
+    public long getCreationTime() {
+        return creationTime;
+    }
+    public String getLastUpdateTimeString() {
+        return this.newTime.getValue();
+    }
+    public long getLastUpdateTime() {
+        return this.newTime.getLong();
+    }
+    public void updateTime() {
+        this.newTime.setValue(System.currentTimeMillis());
+    }
+    public StringProperty getTime() {
+        return newTime.valueProperty();
     }
 }

@@ -29,6 +29,23 @@ public class AdminController {
         if(!isIDEmpty(id)) {
             isValid = false;
         }
+        if(!containsSpaces(id)) {
+            isValid = false;
+        }
+        return isValid;
+    }
+
+    private boolean isIDValid(String id, String altStr) {
+        boolean isValid = true;
+        if(!isIDUnique(id, "")) {
+            isValid = false;
+        }
+        if(!isIDEmpty(id)) {
+            isValid = false;
+        }
+        if(!containsSpaces(id)) {
+            isValid = false;
+        }
         return isValid;
     }
 
@@ -36,19 +53,39 @@ public class AdminController {
         boolean isUnique = true;
         if(userList.containsKey(id)) {
             isUnique = false;
-            System.out.println("ID Already Exists!");
+            createOutputWindow("ID Already Exists!");
         }
         return isUnique;
+    }
+
+    //This version of the funciton is called when checking for unique ids. (ID is unique if count <= 1)
+    private boolean isIDUnique(String id, String altStr) {
+        int count = 0;
+        for (HashMap.Entry<String,SysEntries> mapElement : app.getUserList().entrySet()) {
+            if(mapElement.getKey() == id)
+                count++;
+        }
+        return count <= 1 ? true : false;
     }
 
     private boolean isIDEmpty(String id) {
         boolean isEmpty = true;
         if(id.length() == 0) {
             isEmpty = false;
-            System.out.println("ID can not be empty!");
+            createOutputWindow("ID can not be empty!");
         }
         return isEmpty;
     }
+
+    private boolean containsSpaces(String id) {
+        boolean noContainSpace = true;
+        if(id.length() != id.replace(" ", "").length()) {
+            noContainSpace = false;
+            createOutputWindow("ID can not contain spaces!");
+        }
+        return noContainSpace;
+    }
+
 
     //Top Right Button Functionalities
     public void openSecondary(TreeItem<SysEntries> userData) throws IOException { //Opens new user view window.
@@ -138,7 +175,28 @@ public class AdminController {
             percentage = numPositive / numMessage * 100.0;
         }
         resultMessage = "Positive Messages Percentage: " +
-         String.format("%5.2f", percentage) + "%";
+        String.format("%5.2f", percentage) + "%";
+        createOutputWindow(resultMessage);
+    }
+    public void validateIds() {
+        String resultMessage;
+        boolean isValidOverall = true;
+        
+        //Checks if all of the string ids are valid. For loop returns false if an entry is NOT valid.
+        for (HashMap.Entry<String,SysEntries> mapElement : app.getUserList().entrySet()) {
+            isValidOverall = isValidOverall && isIDValid(mapElement.getKey(), "");
+        }
+
+        resultMessage = isValidOverall ? "All Current IDs are Valid" : "Contains Invalid IDs";
+        createOutputWindow(resultMessage);
+    }
+
+    public void findLastUpdatedUser() {
+        String resultMessage;
+        FindLastUpdatedVisitor visit = new FindLastUpdatedVisitor();
+        SysEntries root = app.getRootItem().getValue();
+        root.accept(visit);
+        resultMessage = "Last Updated User: " + visit.getLastUpdatedUser();
         createOutputWindow(resultMessage);
     }
     private void createOutputWindow(String message) { //Open window to display results from bottom right buttons.

@@ -66,6 +66,13 @@ public class AdminScene implements SceneMaker{
         showPositivePercentage.setMinSize(170, 41);
         showPositivePercentage.setWrapText(true);
         showPositivePercentage.setCenterShape(true);
+        Button validateIds = new Button("Validate IDs");
+        validateIds.setMinSize(170, 41);
+        validateIds.setCenterShape(true);
+        Button findLastUpdatedUser = new Button("Find Last Updated User");
+        findLastUpdatedUser.setMinSize(170, 41);
+        findLastUpdatedUser.setWrapText(true);
+        findLastUpdatedUser.setCenterShape(true);
 
         //Setting Button Functionality
         addUser.setOnAction(event -> {
@@ -97,6 +104,14 @@ public class AdminScene implements SceneMaker{
             System.out.println("Showing Positive Percentage");
             admin.getPositivePercentage();
         });
+        validateIds.setOnAction(event -> {
+            System.out.println("Showing if IDs are all valid");
+            admin.validateIds();
+        });
+        findLastUpdatedUser.setOnAction(event -> {
+            System.out.println("Finding Last User Updated");
+            admin.findLastUpdatedUser();
+        });
 
         //Creating the Right Side UI Panel for the Admin Control Panel
         VBox rightBox = new VBox(20);
@@ -112,11 +127,11 @@ public class AdminScene implements SceneMaker{
         topButtons.getChildren().addAll(topLeft, topRight);
 
         HBox bottomButtons = new HBox(20);
-        bottomButtons.setPadding(new Insets(114.0, 0.0, 0.0, 0.0));
+        bottomButtons.setPadding(new Insets(52.0, 0.0, 0.0, 0.0));
         VBox bottomLeft = new VBox(20);
-        bottomLeft.getChildren().addAll(showUserTotal, showMessageTotal);
+        bottomLeft.getChildren().addAll(showUserTotal, showMessageTotal, validateIds);
         VBox bottomRight = new VBox(20);
-        bottomRight.getChildren().addAll(showGroupTotal, showPositivePercentage);
+        bottomRight.getChildren().addAll(showGroupTotal, showPositivePercentage, findLastUpdatedUser);
         bottomButtons.getChildren().addAll(bottomLeft, bottomRight);
 
         rightBox.getChildren().addAll(topButtons, openUserWindow, bottomButtons);

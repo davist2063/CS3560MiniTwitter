@@ -20,6 +20,9 @@ public class UserController {
     public String getUserId() {
         return user.getValue().getId();
     }
+    public Users getUser() {
+        return (Users)user.getValue();
+    }
     public ListView<Users> getCurrentFollowings() {
         return userData.getCurrentFollowings();
     }

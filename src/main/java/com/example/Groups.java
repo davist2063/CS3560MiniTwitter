@@ -6,8 +6,10 @@ public class Groups implements SysEntries {
 
     private String groupId = "";
     private ArrayList<SysEntries> entryList = new ArrayList<SysEntries>();
+    private Long creationTime;
 
     public Groups() {
+        creationTime = System.currentTimeMillis();
     }
 
     @Override

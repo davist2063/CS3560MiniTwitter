@@ -36,7 +36,7 @@ public class AppSingleton {
         currGroup = rootItem;
         rootItem.setExpanded(true);
         this.tree = new TreeView<SysEntries>(rootItem); //Attaches the Root to the Base of the TreeView.  
-
+        
         //Works on the process of node selection
         tree.getSelectionModel()
         .selectedItemProperty()
@@ -49,6 +49,8 @@ public class AppSingleton {
                 currGroup = newValue;
             }
         });
+
+        userList.put("Root", node);
         return;
     }
     TreeView<SysEntries> getTree() {

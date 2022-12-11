@@ -1,5 +1,6 @@
 package com.example;
 
+import javafx.beans.binding.Bindings;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -42,6 +43,9 @@ public class UserScene implements SceneMaker {
         postTweet.setCenterShape(true);
         ListView<Users> currentFollowing = userControl.getCurrentFollowings();
         ListView<String> newsFeed = userControl.getNewsFeed();
+        Text creationTime = new Text("Creation Time: " + userControl.getUser().getCreationTime());
+        Text lastUpdateTime = new Text();
+        lastUpdateTime.textProperty().bind(Bindings.convert(userControl.getUser().getTime()));
 
         //Setting button functionality
         followUser.setOnAction(event -> {
@@ -60,8 +64,10 @@ public class UserScene implements SceneMaker {
         HBox topButtons = new HBox(20);
         topButtons.getChildren().addAll(uid, followUser);
         HBox bottomButtons = new HBox(20);
-        bottomButtons.getChildren().addAll(tweetMessage, postTweet);        
-        userWindow.getChildren().addAll(currUser, topButtons, currFollowing, currentFollowing, bottomButtons, feed, newsFeed);
+        bottomButtons.getChildren().addAll(tweetMessage, postTweet);
+        HBox bottomRecords = new HBox(20);
+        bottomRecords.getChildren().addAll(creationTime, lastUpdateTime);        
+        userWindow.getChildren().addAll(currUser, topButtons, currFollowing, currentFollowing, bottomButtons, feed, newsFeed, bottomRecords);
         Scene scene = new Scene(userWindow, 640, 480);
         return scene;
     }
